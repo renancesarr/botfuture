@@ -61,10 +61,33 @@ class BinanceClient:
         raw_candles = self.make_request("GET", "/fapi/v1/markPriceKlines", data)
         
         candles = dict()
-        candles['openTime']
-        candles['open']
-        candles['high']
-        candles['low']
-        candles['close']
-        candles['numberOfTrades']
+        candles['openTime'] = []
+        candles['open'] = []
+        candles['high'] = []
+        candles['low'] = []
+        candles['close'] = []
+        
+        if raw_candles is not None:
+            for c in raw_candles:
+                candles["openTime"].append(c[0])
+                candles["open"].append(float(c[1]))
+                candles["high"].append(float(c[2]))
+                candles["low"].append(float(c[3]))
+                candles["close"].append(float(c[4]))
+            return candles
+        else:
+            return None
+        
+    def market_price_symbol(self, symbol):
+        data = dict()
+        data['symbol'] = symbol
+        
+        ob_data = self.make_request("GET", "/fapi/v1/premiumIndex", data)
+        if ob_data is not None:
+            price = float(ob_data['markPrice'])
+            return price
+        else:
+            return None
+                
+        
         

@@ -31,8 +31,6 @@ class BinanceClient:
                 logger.error("O servidor demorou muito para responder")
             except TooManyRedirects:
                 logger.error("O servidor demorou muito para responder")
-            except SSLError:
-                logger.error("Certificado invalido")
             else:
                 if response.status_code == 200:
                     return response.json()
@@ -52,6 +50,9 @@ class BinanceClient:
             for contract_data in exchange_info['symbols']:
                 if contract_data["contractType"] == "PERPETUAL" and contract_data["quoteAsset"] == "USDT":
                     contracts.append(contract_data['pair'])
+            return contracts
+        else:
+            return None
             
     def get_historical_candles(self, symbol, interval, limit):
         data = dict()
